@@ -1,0 +1,12 @@
+<launch >
+    <arg  name = "base_frame"    default = "/base_footprint"/>  
+    <arg name = "lidar_frame"     default = "base_laser_link"/>
+
+    <include file = "$(find chick_navigation)/launch/lidar/rplidar.launch">
+        <arg name ="lidar_frame"            valud = "$(arg lidar_frame)"/>
+    </include >
+
+  <node pkg="tf" type="static_transform_publisher" name="base_footprint_to_laser"
+        args="0.1037 0.0 0.165 3.14159265 0.0 0.0 $(arg base_frame) $(arg lidar_frame) 20">
+    </node>
+</launch >

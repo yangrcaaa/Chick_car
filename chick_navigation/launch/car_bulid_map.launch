@@ -1,0 +1,28 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="slam_methods" default="gmapping" doc="slam type [gmapping, hector, karto, cartographer]"/>
+  <arg name="pub_imu"       default="False" />
+  <arg name="sub_ackermann"       default="False" />
+  <arg name="planner"  default="teb" doc="opt: dwa, teb"/> 
+
+  <!--open lidar-->
+  <include file="$(find robot_navigation)/launch/lidar.launch">
+    </include>
+
+  <!--open base_control-->
+  <include file="$(find base_control)/launch/base_control.launch">
+    <arg name="pub_imu"            value="$(arg pub_imu)"/>  
+    <arg name="sub_ackermann"            value="$(arg sub_ackermann)"/>  
+  </include>
+
+  <!-- open slam algorithm -->
+  <include file="$(find chick_navigation)/launch/slam_methods/$(arg slam_methods).launch">
+  </include>
+
+  <!-- open local navigation planner -->
+  <group unless="$(eval planner == '')">
+    <include file="$(find chick_navigation)/launch/local_planner.launch" unless="$(eval planner == '')">
+      <arg name="planner"            value="$(arg planner)"/>
+    </include>
+  </group>  
+</launch>
